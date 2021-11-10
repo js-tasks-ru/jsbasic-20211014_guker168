@@ -41,4 +41,3 @@ export default class ProductCard {
 }
 
 document.body.addEventListener('product-add', (event) => console.log(event.detail));
-
