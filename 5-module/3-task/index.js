@@ -1,4 +1,5 @@
 function initCarousel() {
+  // ваш код...
   let slides = document.querySelector(".carousel__inner");
   let slideWidth = document.querySelector(".carousel__slide").offsetWidth;
 
