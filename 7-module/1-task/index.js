@@ -43,21 +43,50 @@ export default class RibbonMenu {
 
   addEventListeners() {
     this.elem.onclick = ({ target }) => {
-      // console.log(target);
+      let ribbonInner = this.sub("inner");
+      // let button = target.closest(".ribbon__arrow");
+      if (target.closest(".ribbon__arrow_right")) {
+        this.right();
+        this.update();
+      } else if (target.closest(".ribbon__arrow_left")) {
+        this.left();
+        this.update();
+      }
     };
   }
 
+  right = () => {
+    this.sub("inner").scrollLeft += 350;
+    // this.update();
+  };
+  left = () => {
+    this.sub("inner").scrollLeft -= 350;
+    // this.update();
+  };
+
   update() {
-    let buttonRigth = this.sub("arrow_right");
+    let buttonRight = this.sub("arrow_right");
     let buttonLeft = this.sub("arrow_left");
     let ribbonInner = this.sub("inner");
-    buttonRigth.onclick = function () {
-      console.log("click right");
-      ribbonInner.scrollBy(350, 0);
-    };
-    buttonLeft.onclick = function () {
-      console.log("click left");
-      ribbonInner.scrollBy(-350, 0);
-    };
+    // console.log(ribbonInner.scrollLeft);
+    // buttonRight.classList.add("ribbon__arrow_visible");
+    let scrollWidth = ribbonInner.scrollWidth;
+    let scrollLeft = ribbonInner.scrollLeft;
+    let clientWidth = ribbonInner.clientWidth;
+
+    let scrollRight = scrollWidth - scrollLeft - clientWidth;
+
+    if (ribbonInner.scrollLeft == 0) {
+      buttonLeft.classList.remove("ribbon__arrow_visible");
+    } else if (ribbonInner.scrollLeft !== 0) {
+      buttonLeft.classList.add("ribbon__arrow_visible");
+    }
+    if (ribbonInner.scrollLeft < 1) {
+      buttonRight.classList.add('ribbon__arrow_visible');
+    } else {
+      buttonRight.classList.remove('ribbon__arrow_visible');
+    }
+
+    console.log(this.elem.querySelector(".ribbon__inner").scrollLeft);
   }
 }
