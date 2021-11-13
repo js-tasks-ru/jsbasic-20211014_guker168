@@ -29,7 +29,7 @@ export default class RibbonMenu {
 
     let categoriesMap = this.categories.map((el) => {
       return createElement(`
-      <a href="#" class="ribbon__item ribbon__item_active" data-id=${el.id}>${el.name}</a>
+      <a href="#" class="ribbon__item" data-id=${el.id}>${el.name}</a>
       `);
     });
 
@@ -43,8 +43,17 @@ export default class RibbonMenu {
 
   addEventListeners() {
     this.elem.onclick = ({ target }) => {
-      let ribbonInner = this.sub("inner");
-      // let button = target.closest(".ribbon__arrow");
+      this.anchor = target.closest(".ribbon__item");
+      if (this.anchor) {
+        this.choseAnchor();
+        let customEvent = new CustomEvent("ribbon-select", {
+          detail: this.anchor.dataset.id,
+          bubbles: true,
+        });
+        this.elem.dispatchEvent(customEvent);
+      }
+
+      //=================================================
       if (target.closest(".ribbon__arrow_right")) {
         this.right();
         this.update();
@@ -56,13 +65,18 @@ export default class RibbonMenu {
   }
 
   right = () => {
-    this.sub("inner").scrollLeft += 350;
+    this.sub("inner").scrollBy(350, 0);
     // this.update();
   };
   left = () => {
-    this.sub("inner").scrollLeft -= 350;
+    this.sub("inner").scrollBy(-350, 0);
     // this.update();
   };
+
+  choseAnchor = () => {
+    this.elem.querySelectorAll('.ribbon__item').forEach(el => el.classList.remove('ribbon__item_active'));
+    this.anchor.classList.add('ribbon__item_active');
+  }
 
   update() {
     let buttonRight = this.sub("arrow_right");
@@ -82,11 +96,14 @@ export default class RibbonMenu {
       buttonLeft.classList.add("ribbon__arrow_visible");
     }
     if (ribbonInner.scrollLeft < 1) {
-      buttonRight.classList.add('ribbon__arrow_visible');
+      buttonRight.classList.add("ribbon__arrow_visible");
     } else {
-      buttonRight.classList.remove('ribbon__arrow_visible');
+      buttonRight.classList.remove("ribbon__arrow_visible");
     }
+
 
     console.log(this.elem.querySelector(".ribbon__inner").scrollLeft);
   }
 }
+
+document.body.addEventListener('ribbon-select', (event) => console.log(event.detail));
