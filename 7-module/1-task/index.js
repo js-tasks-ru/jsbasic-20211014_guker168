@@ -56,39 +56,38 @@ export default class RibbonMenu {
       //=================================================
       if (target.closest(".ribbon__arrow_right")) {
         this.right();
-        this.update();
       } else if (target.closest(".ribbon__arrow_left")) {
         this.left();
-        this.update();
       }
     };
+    //===================================================
+
+    this.elem.querySelector('.ribbon__inner').onscroll = () => {
+      this.update();
+    };
+    //===================================================
   }
 
   right = () => {
     this.sub("inner").scrollBy(350, 0);
-    // this.update();
   };
   left = () => {
     this.sub("inner").scrollBy(-350, 0);
-    // this.update();
   };
 
   choseAnchor = () => {
-    this.elem.querySelectorAll('.ribbon__item').forEach(el => el.classList.remove('ribbon__item_active'));
-    this.anchor.classList.add('ribbon__item_active');
-  }
+    this.elem
+      .querySelectorAll(".ribbon__item")
+      .forEach((el) => el.classList.remove("ribbon__item_active"));
+    this.anchor.classList.add("ribbon__item_active");
+  };
 
   update() {
     let buttonRight = this.sub("arrow_right");
     let buttonLeft = this.sub("arrow_left");
-    let ribbonInner = this.sub("inner");
-    // console.log(ribbonInner.scrollLeft);
-    // buttonRight.classList.add("ribbon__arrow_visible");
-    let scrollWidth = ribbonInner.scrollWidth;
-    let scrollLeft = ribbonInner.scrollLeft;
-    let clientWidth = ribbonInner.clientWidth;
-
-    let scrollRight = scrollWidth - scrollLeft - clientWidth;
+    buttonRight.classList.add("ribbon__arrow_visible");
+    buttonLeft.classList.remove("ribbon__arrow_visible");
+    let ribbonInner = this.elem.querySelector(".ribbon__inner");
 
     if (ribbonInner.scrollLeft == 0) {
       buttonLeft.classList.remove("ribbon__arrow_visible");
@@ -100,10 +99,9 @@ export default class RibbonMenu {
     } else {
       buttonRight.classList.remove("ribbon__arrow_visible");
     }
-
-
-    console.log(this.elem.querySelector(".ribbon__inner").scrollLeft);
   }
 }
 
-document.body.addEventListener('ribbon-select', (event) => console.log(event.detail));
+document.body.addEventListener("ribbon-select", (event) =>
+  console.log(event.detail)
+);
