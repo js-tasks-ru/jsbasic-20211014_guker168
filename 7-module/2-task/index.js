@@ -44,21 +44,23 @@ export default class Modal {
   close() {
     document.body.classList.remove("is-modal-open");
     this.elem.remove();
+    document.removeEventListener("keydown", this.escFunc);
   }
-
+  //======================================================
+  escFunc = (event) => {
+    if (event.code === "Escape") {
+      this.close();
+      document.removeEventListener("keydown", this.escFunc);
+    }
+  };
+  onClick = ({ target }) => {
+    if (target.closest(".modal__close")) {
+      this.close();
+    }
+  };
+  //======================================================
   addEventListeners() {
-    this.elem.onclick = ({ target }) => {
-      if (target.closest(".modal__close")) {
-        this.close();
-        this.elem.remove();
-      }
-    };
-    let escFunc = (event) => {
-      if (event.code === "Escape") {
-        this.close();
-        document.removeEventListener("keydown", escFunc);
-      }
-    };
-    document.addEventListener("keydown", escFunc);
+    document.addEventListener("click", this.onClick);
+    document.addEventListener("keydown", this.escFunc);
   }
 }
