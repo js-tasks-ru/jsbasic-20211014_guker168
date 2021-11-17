@@ -1,4 +1,4 @@
-import createElement from '../../assets/lib/create-element.js';
+import createElement from "../../assets/lib/create-element.js";
 
 export default class StepSlider {
   constructor({ steps, value = 0 }) {
@@ -25,7 +25,7 @@ export default class StepSlider {
     </div>
   </div>
     `);
-    document.querySelector('.container').append(this.elem);
+    document.querySelector(".container").append(this.elem);
     this.sliderSteps();
   }
   sliderSteps() {
@@ -41,7 +41,6 @@ export default class StepSlider {
     sliderSteps.innerHTML = [...sliders].join("");
   }
   onClick = (event) => {
-    
     let thumb = this.elem.querySelector(".slider__thumb"); // Ползунок
     let progress = this.elem.querySelector(".slider__progress"); // Бар для результата
     let left = event.clientX - this.elem.getBoundingClientRect().left;
@@ -54,6 +53,17 @@ export default class StepSlider {
     progress.style.width = `${valuePercents}%`;
     this.elem.querySelector(".slider__value").innerHTML = value;
     this.value = +this.elem.querySelector(".slider__value").innerHTML;
+
+    let sliderSpans = this.elem
+      .querySelector(".slider__steps")
+      .querySelectorAll("span");
+    sliderSpans.forEach((el, i, arr) => {
+      if (i == this.value) {
+        el.classList.add("slider__step-active");
+      } else {
+        el.classList.remove("slider__step-active");
+      }
+    });
 
     let customEvent = new CustomEvent("slider-change", {
       detail: this.value,
@@ -152,7 +162,7 @@ export default class StepSlider {
     thumb.ondrag = () => false;
     thumb.ondend = () => false;
     thumb.addEventListener("pointerdown", this.pointerDown);
-    this.elem.addEventListener('click', this.onClick);
+    this.elem.addEventListener("click", this.onClick);
   }
 }
 
