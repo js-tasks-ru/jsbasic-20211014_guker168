@@ -45,12 +45,12 @@ export default class Modal {
     document.body.classList.remove("is-modal-open");
     this.elem.remove();
     document.removeEventListener("keydown", this.escFunc);
+    document.removeEventListener('click', this.onClick);
   }
   //======================================================
   escFunc = (event) => {
     if (event.code === "Escape") {
       this.close();
-      document.removeEventListener("keydown", this.escFunc);
     }
   };
   onClick = ({ target }) => {
