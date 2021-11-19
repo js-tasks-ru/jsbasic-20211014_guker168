@@ -14,6 +14,7 @@ export default class ProductGrid {
       <!--ВОТ ТУТ БУДУТ КАРТОЧКИ ТОВАРОВ-->
     </div>
   </div>`);
+    this.updateFilter(this.filters);
     // this.showCards();
   }
 
@@ -26,7 +27,7 @@ export default class ProductGrid {
   // }
 
   updateFilter(filters) {
-    // this.elem.querySelector(".products-grid__inner").innerHTML = null;
+    this.elem.querySelector(".products-grid__inner").innerHTML = null;
     let nuts = document.querySelector("[data-no-nuts]");
     let vegeterian = document.querySelector("[data-vegetarian-only]");
     let spiciness = document.querySelector("[data-max-spiciness]");
@@ -37,26 +38,53 @@ export default class ProductGrid {
     this.filters[Object.keys(spiciness.dataset).join()] = spiciness.checked;
     this.filters[Object.keys(category.dataset).join()] = category.checked;
 
-    if (filters.noNuts == true) {
-      this.products.forEach((el) => {
-        if (el.nuts == false || el.nuts == undefined) {
-          this.elem
-            .querySelector(".products-grid__inner")
-            .append(new ProductCard(el).elem);
-        }
-      });
-    }
-    if (filters.vegeterianOnly == true) {
-      this.products.forEach((el) => {
-        if (el.vegeterian == true) {
-          this.elem
-            .querySelector(".products-grid__inner")
-            .append(new ProductCard(el).elem);
-        }
-      });
-    }
-    console.log(this.filters);
-
-   
+    let filteredArr = this.products.filter((el) => {
+      if (
+        this.filters["noNuts"] == true &&
+        el.nuts !== true &&
+        el.nuts == undefined
+      ) {
+        return true;
+      }
+      if (this.filters["vegetarianOnly"] == true && el.vegeterian == true) {
+        return true;
+      }
+      if (el.spiciness <= filters.maxSpiciness) {
+        return true;
+      }
+      if (el.category == filters.category) {
+        return true;
+      }
+      if (this.filters["noNuts"] == false && this.filters["vegetarianOnly"] == false) {
+        return true;
+      }
+    });
+    filteredArr.forEach((el) => {
+      this.elem
+        .querySelector(".products-grid__inner")
+        .append(new ProductCard(el).elem);
+    });
+    console.log(this.elem.querySelectorAll(".card").length);
   }
 }
+
+// if (filters.noNuts == true) {
+//   this.products.forEach((el) => {
+//     if (el.nuts == false || el.nuts == undefined) {
+//       this.elem
+//         .querySelector(".products-grid__inner")
+//         .append(new ProductCard(el).elem);
+//       return true;
+//     }
+//   });
+// }
+// if (filters.vegeterianOnly == true) {
+//   this.products.forEach((el) => {
+//     if (el.vegeterian == true) {
+//       this.elem
+//         .querySelector(".products-grid__inner")
+//         .append(new ProductCard(el).elem);
+//       return true;
+//     }
+//   });
+// }
