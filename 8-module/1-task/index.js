@@ -44,21 +44,21 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    let initialTopCoord =
-      this.elem.getBoundingClientRect().top + window.pageYOffset;
-    let leftIndent =
-      Math.min(
-        document.querySelector(".container").getBoundingClientRect().right + 20,
-        document.documentElement.clientWidth - this.elem.offsetWidth - 10
-      ) + "px";
-    if (window.pageYOffset > initialTopCoord) {
-      Object.assign(this.elem.style, {
-        position: "",
-        top: "",
-        left: "",
-        zIndex: "",
-      });
-    } else {
+    document.querySelector(".container");
+
+    if (!this.initialTopCoord && this.elem && this.elem.offsetWidth !== 0) {
+      this.initialTopCoord =
+        this.elem.getBoundingClientRect().top + window.pageYOffset;
+    }
+
+    if (window.pageYOffset > this.initialTopCoord) {
+      let leftIndent =
+        Math.min(
+          document.querySelector(".container").getBoundingClientRect().right +
+            20,
+          document.documentElement.clientWidth - this.elem.offsetWidth - 10
+        ) + "px";
+
       Object.assign(this.elem.style, {
         position: "fixed",
         top: "50px",
@@ -66,8 +66,14 @@ export default class CartIcon {
         right: "10px",
         left: leftIndent,
       });
+    } else {
+      Object.assign(this.elem.style, {
+        position: "",
+        top: "",
+        left: "",
+        zIndex: "",
+      });
     }
-    // console.log(document.documentElement.clientWidth);
     let isMobile = document.documentElement.clientWidth <= 767;
     if (isMobile) {
       Object.assign(this.elem.style, {

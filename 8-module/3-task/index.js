@@ -7,10 +7,10 @@ export default class Cart {
   }
 
   addProduct(product) {
-    let cartItem = this.cartItems.find((el) => el.product.id == product.id);
-    if (product == null) {
+    if (product == null || product === undefined) {
       return;
     } else {
+      let cartItem = this.cartItems.find((el) => el.product.id == product.id);
       if (cartItem == undefined) {
         cartItem = {
           product: product,
@@ -20,9 +20,8 @@ export default class Cart {
       } else {
         cartItem.count++;
       }
+      this.onProductUpdate(cartItem);
     }
-    // this.onProductUpdate(cartItem);
-    console.log(this.cartItems);
   }
 
   updateProductCount(productId, amount) {
@@ -33,8 +32,7 @@ export default class Cart {
     if (cartItem.count == 0) {
       this.cartItems.splice(this.cartItems.indexOf(cartItem), 1);
     }
-    // this.onProductUpdate(cartItem);
-    console.log(this.cartItems);
+    this.onProductUpdate(cartItem);
   }
 
   isEmpty() {
@@ -46,19 +44,22 @@ export default class Cart {
   }
 
   getTotalCount() {
-    let totalCount = this.cartItems.reduce((accum, el) => {
-      accum + el.count;
-      return accum;
-    }, 0);
-    console.log(totalCount);
+    // return this.cartItems.reduce((accum, el) => {
+    //   accum += el.count;
+    //   return accum;
+    // }, 0);
+    let sum = 0;
+    for (let i = 0; i < this.cartItems.length; i++) {
+      sum += this.cartItems[i].count;
+    }
+    return sum;
   }
 
   getTotalPrice() {
-    let totalSum = this.cartItems.reduce((accum, el) => {
-      accum + el.getTotalPrice;
-      return accum;
+    return this.cartItems.reduce((accum, el) => {
+      accum += el.product.price * el.count;
+      return +accum.toFixed(2);
     }, 0);
-    console.log(totalSum);
   }
 
   onProductUpdate(cartItem) {
