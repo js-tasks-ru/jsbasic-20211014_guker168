@@ -126,25 +126,21 @@ export default class Cart {
     this.modal.setBody(body);
     this.modal.open();
     body.addEventListener("click", this.productCountUpdate);
-    body.addEventListener("submit", this.onSubmit);
+    formData.addEventListener("submit", this.onSubmit);
   }
 
   productCountUpdate = (event) => {
     let button = event.target.closest(".cart-counter__button");
-
     if (!button) {
       return false;
     }
-
     let product = button.closest(".cart-product").dataset.productId;
-
     if (button.classList.contains("cart-counter__button_plus")) {
       this.updateProductCount(product, 1);
     }
     if (button.classList.contains("cart-counter__button_minus")) {
       this.updateProductCount(product, -1);
     }
-
     // console.log(button);
     // console.log(product);
   };
@@ -163,13 +159,11 @@ export default class Cart {
       let currentProduct = modalBody.querySelector(
         `[data-product-id="${productId}"]`
       );
-
       productCount.innerHTML = cartItem.count;
-      productPrice.innerHTML = `€${
-        cartItem.product.price.toFixed(2) * cartItem.count
-      }`;
+      productPrice.innerHTML = `€${(
+        cartItem.product.price * cartItem.count
+      ).toFixed(2)}`;
       infoPrice.innerHTML = `€${this.getTotalPrice(cartItem).toFixed(2)}`;
-
       if (cartItem.count == 0) {
         currentProduct.remove();
       }
@@ -177,7 +171,6 @@ export default class Cart {
         this.modal.close();
       }
     }
-
     this.cartIcon.update(this);
   }
 
@@ -187,25 +180,26 @@ export default class Cart {
     let formData = new FormData(form);
     let submitButton = document.querySelector('button[type="submit"]');
     submitButton.classList.add("is-loading");
-
     fetch(`https://httpbin.org/post`, {
       method: "POST",
       body: formData,
-    })
-      .then((response) => {
-        if (response.ok) {
-          this.modal.setTitle("Sucess!");
-          this.modal.setBody(createElement(`<div class="modal__body-inner">
+    }).then((response) => {
+      if (response.ok) {
+        this.modal.setTitle("Success!");
+        this.modal.setBody(
+          createElement(`<div class="modal__body-inner">
           <p>
             Order successful! Your order is being cooked :) <br>
             We’ll notify you about delivery time shortly.<br>
             <img src="/assets/images/delivery.gif">
           </p>
-        </div>`));
-          this.cartItems.length = 0;
-          console.log(this.cartItems);
-        }
-      });
+        </div>`)
+        );
+        this.cartItems.length = 0;
+        this.cartIcon.update(this);
+        console.log(this.cartItems);
+      }
+    });
   };
 
   addEventListeners() {
