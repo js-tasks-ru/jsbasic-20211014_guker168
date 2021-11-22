@@ -28,6 +28,7 @@ export default class Modal {
   open() {
     document.body.classList.add("is-modal-open");
     document.body.append(this.elem);
+    this.addEventListeners();
   }
 
   setTitle(titleInner) {
@@ -45,12 +46,12 @@ export default class Modal {
     document.body.classList.remove("is-modal-open");
     this.elem.remove();
     document.removeEventListener("keydown", this.escFunc);
+    document.removeEventListener('click', this.onClick);
   }
   //======================================================
   escFunc = (event) => {
     if (event.code === "Escape") {
       this.close();
-      document.removeEventListener("keydown", this.escFunc);
     }
   };
   onClick = ({ target }) => {
