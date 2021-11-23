@@ -57,7 +57,6 @@ export default class ProductGrid {
         }
       });
 
-    //=======================================================================
     filteredArr.forEach((el) => {
       this.elem
         .querySelector(".products-grid__inner")
