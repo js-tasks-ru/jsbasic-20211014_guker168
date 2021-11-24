@@ -3,7 +3,6 @@ export default class Cart {
 
   constructor(cartIcon) {
     this.cartIcon = cartIcon;
-    // this.addProduct(null);
   }
 
   addProduct(product) {
@@ -44,10 +43,6 @@ export default class Cart {
   }
 
   getTotalCount() {
-    // return this.cartItems.reduce((accum, el) => {
-    //   accum += el.count;
-    //   return accum;
-    // }, 0);
     let sum = 0;
     for (let i = 0; i < this.cartItems.length; i++) {
       sum += this.cartItems[i].count;
@@ -63,8 +58,6 @@ export default class Cart {
   }
 
   onProductUpdate(cartItem) {
-    // реализуем в следующей задаче
-
     this.cartIcon.update(this);
   }
 }

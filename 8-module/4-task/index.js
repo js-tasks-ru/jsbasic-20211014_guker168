@@ -113,7 +113,6 @@ export default class Cart {
   }
 
   renderModal() {
-    // let modal = new Modal();
     let body = createElement(`<div></div>`);
     let formData = this.renderOrderForm();
     let modalBody = this.cartItems.map((product) =>
@@ -141,8 +140,6 @@ export default class Cart {
     if (button.classList.contains("cart-counter__button_minus")) {
       this.updateProductCount(product, -1);
     }
-    // console.log(button);
-    // console.log(product);
   };
 
   onProductUpdate(cartItem) {
@@ -197,7 +194,6 @@ export default class Cart {
         );
         this.cartItems.length = 0;
         this.cartIcon.update(this);
-        console.log(this.cartItems);
       }
     });
   };
